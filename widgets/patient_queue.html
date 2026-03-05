@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Patient Queue</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 12px; background:#f7f8fa; }
+      h1 { font-size: 16px; margin: 0 0 8px; }
+      .card { background: #fff; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid #e0e4eb; }
+      .tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; background: #eef2ff; color: #3949ab; padding: 2px 6px; border-radius: 4px; }
+      .need { font-size: 13px; color: #46505c; margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Trial Matching Queue</h1>
+    <div id="patient-queue"></div>
+    <script>
+      window.renderPatientQueue = function (patients = []) {
+        const container = document.getElementById("patient-queue");
+        container.innerHTML = "";
+        patients.forEach((p) => {
+          const div = document.createElement("div");
+          div.className = "card";
+          div.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong>${p.name}</strong>
+              <span class="tag">${p.primary_condition || "Condition"}</span>
+            </div>
+            <div class="need">${p.alternate_need || "Alternate therapy need"}</div>
+          `;
+          container.appendChild(div);
+        });
+      };
+    </script>
+  </body>
+</html>

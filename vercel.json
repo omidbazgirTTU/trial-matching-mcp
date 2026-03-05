@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/mcp.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "rewrites": [
+    { "source": "/mcp", "destination": "/api/mcp.py" },
+    { "source": "/mcp/(.*)", "destination": "/api/mcp.py/$1" }
+  ]
+}
