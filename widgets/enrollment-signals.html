@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Enrollment Signals</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin:0; padding:14px; background:#fdf7f0; }
+      .card { background:#fff; border-radius:12px; padding:16px; border:1px solid #f5d0a9; box-shadow:0 1px 3px rgba(249,115,22,.25); }
+      h1 { margin:0 0 6px; font-size:16px; color:#9a3412; }
+      .counts { display:flex; gap:16px; margin-bottom:12px; }
+      .counts div { background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:10px; min-width:120px; }
+      .counts strong { display:block; font-size:20px; color:#c2410c; }
+      pre { background:#0f172a; color:#f8fafc; border-radius:8px; padding:10px; overflow:auto; font-size:12px; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1 id="condition"></h1>
+      <div class="counts">
+        <div><span>Recruiting</span><strong id="recruiting">--</strong></div>
+        <div><span>Completed</span><strong id="completed">--</strong></div>
+      </div>
+      <h3>Sample trials</h3>
+      <pre id="sample"></pre>
+    </div>
+    <script>
+      window.renderEnrollmentSignals = function (payload = {}) {
+        document.getElementById("condition").textContent = payload.condition || "Condition";
+        const counts = payload.counts || {};
+        document.getElementById("recruiting").textContent = counts.recruiting || "--";
+        document.getElementById("completed").textContent = counts.completed || "--";
+        document.getElementById("sample").textContent = payload.sample_trials || "";
+      };
+    </script>
+  </body>
+</html>

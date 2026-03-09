@@ -91,26 +91,57 @@ def generate_recruitment_shortlist(
 
 @server.tool(description="Get a summarized trial brief and eligibility text by NCT ID.")
 def get_trial_brief(nct_id: str) -> dict[str, Any]:
-    return trial_detail_brief(nct_id)
+    result = trial_detail_brief(nct_id)
+    widget_data = {
+        "nct_id": result.get("nct_id"),
+        "details_text": result.get("details_text"),
+        "eligibility_text": result.get("eligibility_text"),
+    }
+    result["ui"] = {"widgetUri": WIDGET_URIS.get("trial_detail"), "data": widget_data}
+    return result
 
 
 @server.tool(
     description="Compare a patient's profile with trial eligibility text and surface potential gaps."
 )
 def analyze_trial_eligibility(patient_id: str, nct_id: str) -> dict[str, Any]:
-    return eligibility_gap_analysis(patient_id, nct_id)
+    result = eligibility_gap_analysis(patient_id, nct_id)
+    widget_data = {
+        "patient_id": result.get("patient_id"),
+        "nct_id": result.get("nct_id"),
+        "summary": result.get("summary"),
+        "signals": result.get("signals"),
+    }
+    result["ui"] = {"widgetUri": WIDGET_URIS.get("eligibility_gaps"), "data": widget_data}
+    return result
 
 
 @server.tool(description="Summarize nearest trial sites and coverage radius by patient.")
 def geospatial_coverage(patient_ids: list[str] | None = None) -> dict[str, Any]:
-    return geospatial_coverage_summary(patient_ids=patient_ids)
+    result = geospatial_coverage_summary(patient_ids=patient_ids)
+    widget_data = {
+        "radius_buckets": result.get("radius_buckets"),
+        "patients": result.get("patients"),
+    }
+    result["ui"] = {"widgetUri": WIDGET_URIS.get("geo_coverage"), "data": widget_data}
+    return result
 
 
 @server.tool(description="View recent enrollment activity signals for a condition or patient.")
 def enrollment_signals(
     condition: str | None = None, patient_id: str | None = None
 ) -> dict[str, Any]:
-    return enrollment_signal_snapshot(patient_id=patient_id, condition=condition)
+    result = enrollment_signal_snapshot(patient_id=patient_id, condition=condition)
+    widget_data = {
+        "condition": result.get("condition"),
+        "counts": result.get("counts"),
+        "sample_trials": result.get("sample_trials"),
+    }
+    result["ui"] = {
+        "widgetUri": WIDGET_URIS.get("enrollment_signals"),
+        "data": widget_data,
+    }
+    return result
 
 
 @server.tool(description="Record an actionable follow-up item for a patient.")
@@ -120,12 +151,18 @@ def log_follow_up(
     owner: str = "coordinator",
     due_date: str | None = None,
 ) -> dict[str, Any]:
-    return record_follow_up(patient_id, note, owner=owner, due_date=due_date)
+    entry = record_follow_up(patient_id, note, owner=owner, due_date=due_date)
+    widget_data = {"items": [entry]}
+    entry["ui"] = {"widgetUri": WIDGET_URIS.get("follow_up_log"), "data": widget_data}
+    return entry
 
 
 @server.tool(description="List recorded follow-up items, optionally filtered by patient.")
 def list_follow_up_items(patient_id: str | None = None) -> dict[str, Any]:
-    return list_follow_ups(patient_id=patient_id)
+    result = list_follow_ups(patient_id=patient_id)
+    widget_data = {"items": result.get("items", [])}
+    result["ui"] = {"widgetUri": WIDGET_URIS.get("follow_up_log"), "data": widget_data}
+    return result
 
 
 def run_http(host: str, port: int) -> None:

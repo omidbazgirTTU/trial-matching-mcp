@@ -14,6 +14,11 @@ WIDGET_URIS = {
     "trial_matches": "ui://trial-matching/trial-matches.html",
     "program_summary": "ui://trial-matching/program-summary.html",
     "recruitment_shortlist": "ui://trial-matching/recruitment-shortlist.html",
+    "trial_detail": "ui://trial-matching/trial-detail.html",
+    "eligibility_gaps": "ui://trial-matching/eligibility-gaps.html",
+    "geo_coverage": "ui://trial-matching/geospatial-coverage.html",
+    "enrollment_signals": "ui://trial-matching/enrollment-signals.html",
+    "follow_up_log": "ui://trial-matching/follow-up-log.html",
 }
 
 

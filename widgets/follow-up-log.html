@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Follow-up Log</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin:0; padding:14px; background:#f6f9f9; }
+      .item { background:#fff; border-radius:10px; padding:12px; border:1px solid #d1fae5; margin-bottom:8px; }
+      .item h3 { margin:0 0 4px; font-size:14px; color:#065f46; }
+      .meta { font-size:11px; color:#065f46; text-transform:uppercase; letter-spacing:0.05em; }
+      .note { font-size:13px; color:#0f172a; }
+    </style>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      window.renderFollowUpLog = function (payload = {}) {
+        const container = document.getElementById("log");
+        container.innerHTML = "";
+        (payload.items || []).forEach(entry => {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+            <div class="meta">${entry.patient_id || ''} · ${entry.owner || ''} · ${entry.status || 'open'}</div>
+            <h3>${entry.due_date || 'No due date'}</h3>
+            <div class="note">${entry.note || ''}</div>
+          `;
+          container.appendChild(div);
+        });
+        if (!container.children.length) {
+          container.innerHTML = '<div class="item"><div class="note">No follow-ups recorded.</div></div>';
+        }
+      };
+    </script>
+  </body>
+</html>

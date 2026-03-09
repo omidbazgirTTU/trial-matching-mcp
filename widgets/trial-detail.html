@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Trial Brief</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 14px; background:#f5f7fb; }
+      .card { background:#fff; border-radius:12px; padding:16px; box-shadow:0 1px 3px rgba(15,23,42,.08); border:1px solid #e2e8f0; }
+      h1 { margin:0 0 8px; font-size:16px; color:#0f172a; }
+      h2 { margin:16px 0 6px; font-size:14px; color:#475569; text-transform:uppercase; letter-spacing:0.05em; }
+      pre { background:#0f172a; color:#e2e8f0; padding:10px; border-radius:8px; overflow:auto; font-size:12px; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1 id="nct"></h1>
+      <h2>Trial Details</h2>
+      <pre id="details">Loading…</pre>
+      <h2>Eligibility</h2>
+      <pre id="eligibility">Loading…</pre>
+    </div>
+    <script>
+      window.renderTrialDetail = function (payload = {}) {
+        document.getElementById("nct").textContent = payload.nct_id || "Trial";
+        document.getElementById("details").textContent = payload.details_text || "";
+        document.getElementById("eligibility").textContent = payload.eligibility_text || "";
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Geospatial Coverage</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin:0; padding:14px; background:#f7fbff; }
+      .grid { display:flex; gap:16px; flex-wrap:wrap; }
+      .stat { background:#fff; border-radius:10px; padding:12px; border:1px solid #dbeafe; min-width:120px; }
+      .stat h3 { margin:0; font-size:12px; color:#475569; text-transform:uppercase; letter-spacing:0.05em; }
+      .stat strong { font-size:20px; color:#1d4ed8; }
+      table { width:100%; border-collapse:collapse; margin-top:16px; background:#fff; border-radius:10px; overflow:hidden; }
+      th, td { padding:8px 10px; font-size:12px; border-bottom:1px solid #e2e8f0; text-align:left; }
+      th { background:#eaf0ff; color:#1e293b; }
+    </style>
+  </head>
+  <body>
+    <div class="grid" id="stats"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Site</th>
+          <th>City</th>
+          <th>Distance (mi)</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <script>
+      window.renderGeoCoverage = function (payload = {}) {
+        const stats = payload.radius_buckets || {};
+        const statsContainer = document.getElementById("stats");
+        statsContainer.innerHTML = "";
+        Object.entries(stats).forEach(([label, value]) => {
+          const div = document.createElement("div");
+          div.className = "stat";
+          div.innerHTML = `<h3>${label}</h3><strong>${value}</strong>`;
+          statsContainer.appendChild(div);
+        });
+        const rows = document.getElementById("rows");
+        rows.innerHTML = "";
+        (payload.patients || []).forEach(patient => {
+          (patient.sites || []).forEach(site => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${patient.name || patient.patient_id}</td><td>${site.facility}</td><td>${site.city}</td><td>${site.distance_miles ?? '--'}</td>`;
+            rows.appendChild(tr);
+          });
+        });
+      };
+    </script>
+  </body>
+</html>
