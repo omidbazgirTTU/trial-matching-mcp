@@ -8,8 +8,6 @@
   ],
   "rewrites": [
     { "source": "/api/mcp", "destination": "/api/mcp.py" },
-    { "source": "/api/mcp/(.*)", "destination": "/api/mcp.py/$1" },
-    { "source": "/mcp", "destination": "/api/mcp.py" },
-    { "source": "/mcp/(.*)", "destination": "/api/mcp.py/$1" }
+    { "source": "/api/mcp/(.*)", "destination": "/api/mcp.py/$1" }
   ]
 }

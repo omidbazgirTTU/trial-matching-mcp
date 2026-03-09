@@ -57,10 +57,10 @@ vercel            # first-time link to a project
 vercel deploy --prod
 ```
 
-The production endpoint exposes a clean `/mcp` path (with `/api/mcp` kept for backward compatibility). Connect via:
+The production endpoint is exposed at:
 
 ```
-https://trial-matching-mcp-server.vercel.app/mcp
+https://trial-matching-mcp-server.vercel.app/api/mcp.py
 ```
 
 ## Notes & integration details

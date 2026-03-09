@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
+
+os.environ.setdefault("PGEOCODE_DATA_DIR", "/tmp/pgeocode-cache")
 
 import pgeocode
 
@@ -88,6 +91,10 @@ PRIMARY_ENDPOINT_HINTS = {
 
 FOLLOW_UPS_PATH = PACKAGE_ROOT / "coordinator_followups.json"
 HOMECARE_CACHE_PATH = PACKAGE_ROOT / "homecare_patients_cache.json"
+
+# Ensure pgeocode stores its downloaded geospatial datasets in a writable directory.
+PGEOCODE_CACHE = Path(os.environ["PGEOCODE_DATA_DIR"])
+PGEOCODE_CACHE.mkdir(parents=True, exist_ok=True)
 NOMINATIM = pgeocode.Nominatim("us")
 
 
