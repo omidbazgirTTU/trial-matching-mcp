@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Program Summary</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 14px; background:#f6f7fb; }
+      .card { background:#fff; border-radius:12px; padding:16px; box-shadow:0 1px 4px rgba(15,23,42,0.08); border:1px solid #e2e8f0; }
+      h1 { font-size:16px; margin:0 0 8px; color:#0f172a; }
+      .meta { display:flex; gap:24px; font-size:13px; color:#475569; }
+      .stat { font-weight:600; font-size:22px; color:#2563eb; }
+      .label { font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:#94a3b8; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Trial Matching Snapshot</h1>
+      <div id="summary-meta" class="meta"></div>
+    </div>
+    <script>
+      window.renderProgramSummary = function (data = {}) {
+        const container = document.getElementById("summary-meta");
+        const persona = data.persona || "Coordinator";
+        const asOf = data.as_of || "--";
+        const count = data.patient_count ?? "--";
+        container.innerHTML = `
+          <div>
+            <div class="label">Persona</div>
+            <div>${persona}</div>
+          </div>
+          <div>
+            <div class="label">Snapshot Date</div>
+            <div>${asOf}</div>
+          </div>
+          <div>
+            <div class="label">Patients Flagged</div>
+            <div class="stat">${count}</div>
+          </div>
+        `;
+      };
+    </script>
+  </body>
+</html>

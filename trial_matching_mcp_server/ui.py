@@ -12,6 +12,8 @@ WIDGETS_DIR = Path(__file__).resolve().parent.parent / "widgets"
 WIDGET_URIS = {
     "patient_queue": "ui://trial-matching/patient-queue.html",
     "trial_matches": "ui://trial-matching/trial-matches.html",
+    "program_summary": "ui://trial-matching/program-summary.html",
+    "recruitment_shortlist": "ui://trial-matching/recruitment-shortlist.html",
 }
 
 

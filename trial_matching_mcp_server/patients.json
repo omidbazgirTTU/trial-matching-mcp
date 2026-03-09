@@ -9,7 +9,9 @@
       "alternate_need": "HbA1c >9% on metformin + SGLT2i",
       "current_therapies": ["Metformin ER", "Dapagliflozin"],
       "exclude_mechanisms": ["SGLT2"],
-      "notes": "GLP-1 naive, BMI 36.8"
+      "notes": "GLP-1 naive, BMI 36.8",
+      "homecare_patient_id": "PAT-00406",
+      "fallback_zip": "30303"
     },
     {
       "patient_id": "ALT-TRIAL-002",
@@ -18,7 +20,9 @@
       "alternate_need": "Persistent NYHA II-III symptoms on GDMT",
       "current_therapies": ["Sacubitril/valsartan", "Carvedilol", "Spironolactone"],
       "exclude_mechanisms": ["Sacubitril", "Beta blocker"],
-      "notes": "On SGLT2 already"
+      "notes": "On SGLT2 already",
+      "homecare_patient_id": "PAT-00428",
+      "fallback_zip": "30309"
     },
     {
       "patient_id": "ALT-TRIAL-003",
@@ -27,7 +31,9 @@
       "alternate_need": "Heavy albuminuria despite ARB + SGLT2",
       "current_therapies": ["Losartan", "Empagliflozin"],
       "exclude_mechanisms": ["ARB", "SGLT2"],
-      "notes": "Eligible for novel renal-protective agents"
+      "notes": "Eligible for novel renal-protective agents",
+      "homecare_patient_id": "PAT-00756",
+      "fallback_zip": "30322"
     }
   ]
 }

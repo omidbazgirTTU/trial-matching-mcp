@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Recruitment Shortlist</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin:0; padding:14px; background:#f3f4f6; }
+      h1 { font-size:16px; margin:0 0 10px; color:#111827; }
+      table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(15,23,42,0.1); }
+      th, td { font-size:12px; padding:8px 10px; border-bottom:1px solid #e5e7eb; text-align:left; }
+      th { background:#f8fafc; text-transform:uppercase; letter-spacing:0.04em; color:#475569; font-weight:600; }
+      tr:last-child td { border-bottom:none; }
+      .rank { font-weight:600; color:#2563eb; }
+      .prob { font-weight:600; }
+      .distance { color:#059669; font-weight:600; }
+      .centers { font-size:11px; color:#475569; }
+    </style>
+  </head>
+  <body>
+    <h1>Clinical Trial Recruitment Shortlist</h1>
+    <div id="meta" style="font-size:12px; color:#475569; margin-bottom:8px;"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Patient</th>
+          <th>Trial</th>
+          <th>P(Eligible)</th>
+          <th>Nearest Site</th>
+          <th>Active Centers</th>
+        </tr>
+      </thead>
+      <tbody id="shortlist"></tbody>
+    </table>
+    <script>
+      window.renderRecruitmentShortlist = function (payload = {}) {
+        const meta = document.getElementById("meta");
+        const summary = payload.summary || {};
+        const avg = summary.avg_probability ? (summary.avg_probability * 100).toFixed(0) + "%" : "--";
+        meta.textContent = `Patients: ${summary.patients_considered || 0} · Candidates: ${summary.total_candidates || 0} · Avg. Eligibility: ${avg}`;
+        const tbody = document.getElementById("shortlist");
+        tbody.innerHTML = "";
+        (payload.shortlist || []).forEach((entry) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="rank">${entry.rank}</td>
+            <td><strong>${entry.patient_name}</strong><br /><span>${entry.primary_condition || ""}</span></td>
+            <td>${entry.trial_title || "Trial"}<br /><span class="centers">${entry.nct_id || ""}</span></td>
+            <td class="prob">${Math.round((entry.probability_of_eligibility || 0) * 100)}%</td>
+            <td><span class="distance">${entry.distance_miles || "--"} mi</span><br /><span class="centers">${entry.nearest_site ? entry.nearest_site.facility : ""}</span></td>
+            <td class="centers">${(entry.active_center_count || 0)} centers</td>
+          `;
+          tbody.appendChild(row);
+        });
+      };
+    </script>
+  </body>
+</html>

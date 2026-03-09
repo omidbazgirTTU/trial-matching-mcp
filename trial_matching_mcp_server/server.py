@@ -9,16 +9,25 @@ from typing import Any
 from fastmcp import FastMCP
 
 from .data_loader import load_dataset
-from .matching_service import match_trials, patient_cards
+from .matching_service import (
+    build_recruitment_shortlist,
+    eligibility_gap_analysis,
+    enrollment_signal_snapshot,
+    geospatial_coverage_summary,
+    list_follow_ups,
+    match_trials,
+    patient_cards,
+    record_follow_up,
+    trial_detail_brief,
+)
 from .ui import WIDGET_URIS, register_widgets
 
 server = FastMCP("trial-matching-mcp-server")
-server.register_extension("io.modelcontextprotocol/ui")
 register_widgets(server)
 
 
 @server.tool(description="List patients flagged for alternate therapy trial matching.")
-def list_trial_patients() -> list[dict[str, Any]]:
+def list_trial_patients() -> dict[str, Any]:
     cards = patient_cards()
     return {
         "patients": cards,
@@ -42,11 +51,81 @@ def match_patient_trials(patient_id: str, limit: int = 5) -> dict[str, Any]:
 @server.tool(description="Dataset overview and persona context.")
 def trial_matching_summary() -> dict[str, Any]:
     ds = load_dataset()
-    return {
+    payload = {
         "persona": ds.get("persona"),
         "as_of": ds.get("as_of"),
         "patient_count": len(ds.get("patients", [])),
     }
+    payload["ui"] = {
+        "widgetUri": WIDGET_URIS.get("program_summary"),
+        "data": {
+            "persona": payload["persona"],
+            "as_of": payload["as_of"],
+            "patient_count": payload["patient_count"],
+        },
+    }
+    return payload
+
+
+@server.tool(
+    description=(
+        "Generate a ranked clinical-trial recruitment shortlist with eligibility scores "
+        "and nearest recruiting sites."
+    )
+)
+def generate_recruitment_shortlist(
+    patient_ids: list[str] | None = None, trials_per_patient: int = 3
+) -> dict[str, Any]:
+    shortlist = build_recruitment_shortlist(
+        patient_ids=patient_ids, trials_per_patient=trials_per_patient
+    )
+    shortlist["ui"] = {
+        "widgetUri": WIDGET_URIS.get("recruitment_shortlist"),
+        "data": {
+            "shortlist": shortlist.get("shortlist", []),
+            "summary": shortlist.get("summary", {}),
+        },
+    }
+    return shortlist
+
+
+@server.tool(description="Get a summarized trial brief and eligibility text by NCT ID.")
+def get_trial_brief(nct_id: str) -> dict[str, Any]:
+    return trial_detail_brief(nct_id)
+
+
+@server.tool(
+    description="Compare a patient's profile with trial eligibility text and surface potential gaps."
+)
+def analyze_trial_eligibility(patient_id: str, nct_id: str) -> dict[str, Any]:
+    return eligibility_gap_analysis(patient_id, nct_id)
+
+
+@server.tool(description="Summarize nearest trial sites and coverage radius by patient.")
+def geospatial_coverage(patient_ids: list[str] | None = None) -> dict[str, Any]:
+    return geospatial_coverage_summary(patient_ids=patient_ids)
+
+
+@server.tool(description="View recent enrollment activity signals for a condition or patient.")
+def enrollment_signals(
+    condition: str | None = None, patient_id: str | None = None
+) -> dict[str, Any]:
+    return enrollment_signal_snapshot(patient_id=patient_id, condition=condition)
+
+
+@server.tool(description="Record an actionable follow-up item for a patient.")
+def log_follow_up(
+    patient_id: str,
+    note: str,
+    owner: str = "coordinator",
+    due_date: str | None = None,
+) -> dict[str, Any]:
+    return record_follow_up(patient_id, note, owner=owner, due_date=due_date)
+
+
+@server.tool(description="List recorded follow-up items, optionally filtered by patient.")
+def list_follow_up_items(patient_id: str | None = None) -> dict[str, Any]:
+    return list_follow_ups(patient_id=patient_id)
 
 
 def run_http(host: str, port: int) -> None:
