@@ -60,8 +60,10 @@ vercel deploy --prod
 The production endpoint is exposed at:
 
 ```
-https://trial-matching-mcp-server.vercel.app/api/mcp.py
+https://trial-matching-mcp-server.vercel.app/mcp
 ```
+
+(Legacy `/api/mcp.py` still works via rewrite, but the cleaner `/mcp` path is the canonical URL to use with MCP Inspector or ChatGPT.)
 
 ## Notes & integration details
 
